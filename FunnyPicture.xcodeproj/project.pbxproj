@@ -18,14 +18,16 @@
 		1638E5A81DF6B29600B81A33 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1638E5A71DF6B29600B81A33 /* ImageCell.xib */; };
 		1638E5AB1DF6B47800B81A33 /* ImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1638E5AA1DF6B47800B81A33 /* ImageCell.m */; };
 		16568C691DF7DDA800A5F1FC /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16568C681DF7DDA800A5F1FC /* LoadingCell.xib */; };
-		166651981DF524B3006454E2 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 166651961DF524B3006454E2 /* HomeViewController.m */; };
-		166651991DF524B3006454E2 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 166651971DF524B3006454E2 /* HomeViewController.xib */; };
-		1666519D1DF5303B006454E2 /* SummaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1666519B1DF5303B006454E2 /* SummaryCell.m */; };
-		1666519E1DF5303B006454E2 /* SummaryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1666519C1DF5303B006454E2 /* SummaryCell.xib */; };
+		16568C701DF810C400A5F1FC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16568C6B1DF810C400A5F1FC /* HomeViewController.m */; };
+		16568C711DF810C400A5F1FC /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16568C6C1DF810C400A5F1FC /* HomeViewController.xib */; };
+		16568C721DF810C400A5F1FC /* SummaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 16568C6E1DF810C400A5F1FC /* SummaryCell.m */; };
+		16568C731DF810C400A5F1FC /* SummaryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16568C6F1DF810C400A5F1FC /* SummaryCell.xib */; };
+		16568C761DF811F200A5F1FC /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 16568C751DF811F200A5F1FC /* Post.m */; };
 		168E992E1DF56702006429D3 /* PostDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 168E992C1DF56702006429D3 /* PostDetailViewController.m */; };
 		168E992F1DF56702006429D3 /* PostDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 168E992D1DF56702006429D3 /* PostDetailViewController.xib */; };
 		168E99331DF56871006429D3 /* DetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 168E99311DF56871006429D3 /* DetailCell.m */; };
 		168E99341DF56871006429D3 /* DetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 168E99321DF56871006429D3 /* DetailCell.xib */; };
+		392192C2DFEB934CFA3E7A2F /* libPods-FunnyPicture.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4B7E5D0DF05030D16EAB8C6 /* libPods-FunnyPicture.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F9B9A393790ED03DBF1C390 /* Pods-FunnyPicture.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FunnyPicture.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FunnyPicture/Pods-FunnyPicture.debug.xcconfig"; sourceTree = "<group>"; };
 		16046AE01DF2C76400A92E13 /* FunnyPicture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FunnyPicture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16046AE41DF2C76400A92E13 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		16046AE61DF2C76400A92E13 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -60,18 +63,22 @@
 		1638E5A91DF6B47800B81A33 /* ImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCell.h; sourceTree = "<group>"; };
 		1638E5AA1DF6B47800B81A33 /* ImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCell.m; sourceTree = "<group>"; };
 		16568C681DF7DDA800A5F1FC /* LoadingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
-		166651951DF524B3006454E2 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = ../HomeViewController.h; sourceTree = "<group>"; };
-		166651961DF524B3006454E2 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeViewController.m; path = ../HomeViewController.m; sourceTree = "<group>"; };
-		166651971DF524B3006454E2 /* HomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HomeViewController.xib; path = ../HomeViewController.xib; sourceTree = "<group>"; };
-		1666519A1DF5303B006454E2 /* SummaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SummaryCell.h; path = ../SummaryCell.h; sourceTree = "<group>"; };
-		1666519B1DF5303B006454E2 /* SummaryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SummaryCell.m; path = ../SummaryCell.m; sourceTree = "<group>"; };
-		1666519C1DF5303B006454E2 /* SummaryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SummaryCell.xib; path = ../SummaryCell.xib; sourceTree = "<group>"; };
+		16568C6A1DF810C400A5F1FC /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		16568C6B1DF810C400A5F1FC /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		16568C6C1DF810C400A5F1FC /* HomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
+		16568C6D1DF810C400A5F1FC /* SummaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SummaryCell.h; sourceTree = "<group>"; };
+		16568C6E1DF810C400A5F1FC /* SummaryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SummaryCell.m; sourceTree = "<group>"; };
+		16568C6F1DF810C400A5F1FC /* SummaryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SummaryCell.xib; sourceTree = "<group>"; };
+		16568C741DF811F200A5F1FC /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
+		16568C751DF811F200A5F1FC /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
 		168E992B1DF56702006429D3 /* PostDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostDetailViewController.h; sourceTree = "<group>"; };
 		168E992C1DF56702006429D3 /* PostDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostDetailViewController.m; sourceTree = "<group>"; };
 		168E992D1DF56702006429D3 /* PostDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PostDetailViewController.xib; sourceTree = "<group>"; };
 		168E99301DF56871006429D3 /* DetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailCell.h; sourceTree = "<group>"; };
 		168E99311DF56871006429D3 /* DetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailCell.m; sourceTree = "<group>"; };
 		168E99321DF56871006429D3 /* DetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailCell.xib; sourceTree = "<group>"; };
+		D4B7E5D0DF05030D16EAB8C6 /* libPods-FunnyPicture.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FunnyPicture.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6EA594A24EFCAC6972106B8 /* Pods-FunnyPicture.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FunnyPicture.release.xcconfig"; path = "Pods/Target Support Files/Pods-FunnyPicture/Pods-FunnyPicture.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +87,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16046B151DF5233100A92E13 /* libGumbo.a in Frameworks */,
+				392192C2DFEB934CFA3E7A2F /* libPods-FunnyPicture.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +107,8 @@
 				16046AE21DF2C76400A92E13 /* FunnyPicture */,
 				16046AFC1DF2C76400A92E13 /* FunnyPictureTests */,
 				16046AE11DF2C76400A92E13 /* Products */,
+				A5423E71877B57DFB993CAD0 /* Pods */,
+				A8DE016FBCF15EC922C89D08 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -114,14 +124,14 @@
 		16046AE21DF2C76400A92E13 /* FunnyPicture */ = {
 			isa = PBXGroup;
 			children = (
+				16568C6A1DF810C400A5F1FC /* HomeViewController.h */,
+				16568C6B1DF810C400A5F1FC /* HomeViewController.m */,
+				16568C6C1DF810C400A5F1FC /* HomeViewController.xib */,
+				16568C6D1DF810C400A5F1FC /* SummaryCell.h */,
+				16568C6E1DF810C400A5F1FC /* SummaryCell.m */,
+				16568C6F1DF810C400A5F1FC /* SummaryCell.xib */,
 				16046AE61DF2C76400A92E13 /* AppDelegate.h */,
 				16046AE71DF2C76400A92E13 /* AppDelegate.m */,
-				166651951DF524B3006454E2 /* HomeViewController.h */,
-				166651961DF524B3006454E2 /* HomeViewController.m */,
-				166651971DF524B3006454E2 /* HomeViewController.xib */,
-				1666519A1DF5303B006454E2 /* SummaryCell.h */,
-				1666519B1DF5303B006454E2 /* SummaryCell.m */,
-				1666519C1DF5303B006454E2 /* SummaryCell.xib */,
 				168E992B1DF56702006429D3 /* PostDetailViewController.h */,
 				168E992C1DF56702006429D3 /* PostDetailViewController.m */,
 				168E992D1DF56702006429D3 /* PostDetailViewController.xib */,
@@ -132,10 +142,9 @@
 				1638E5AA1DF6B47800B81A33 /* ImageCell.m */,
 				1638E5A71DF6B29600B81A33 /* ImageCell.xib */,
 				16568C681DF7DDA800A5F1FC /* LoadingCell.xib */,
+				16568C741DF811F200A5F1FC /* Post.h */,
+				16568C751DF811F200A5F1FC /* Post.m */,
 				16046B0E1DF5221B00A92E13 /* OCGumbo */,
-				16046AEF1DF2C76400A92E13 /* Assets.xcassets */,
-				16046AF11DF2C76400A92E13 /* LaunchScreen.storyboard */,
-				16046AF41DF2C76400A92E13 /* Info.plist */,
 				16046AE31DF2C76400A92E13 /* Supporting Files */,
 			);
 			path = FunnyPicture;
@@ -144,6 +153,9 @@
 		16046AE31DF2C76400A92E13 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				16046AEF1DF2C76400A92E13 /* Assets.xcassets */,
+				16046AF11DF2C76400A92E13 /* LaunchScreen.storyboard */,
+				16046AF41DF2C76400A92E13 /* Info.plist */,
 				16046AE41DF2C76400A92E13 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -188,6 +200,23 @@
 			path = include;
 			sourceTree = "<group>";
 		};
+		A5423E71877B57DFB993CAD0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0F9B9A393790ED03DBF1C390 /* Pods-FunnyPicture.debug.xcconfig */,
+				F6EA594A24EFCAC6972106B8 /* Pods-FunnyPicture.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A8DE016FBCF15EC922C89D08 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D4B7E5D0DF05030D16EAB8C6 /* libPods-FunnyPicture.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -195,9 +224,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16046B021DF2C76400A92E13 /* Build configuration list for PBXNativeTarget "FunnyPicture" */;
 			buildPhases = (
+				A650F41F69CE7B75A4C2D7BE /* Check Pods Manifest.lock */,
 				16046ADC1DF2C76300A92E13 /* Sources */,
 				16046ADD1DF2C76300A92E13 /* Frameworks */,
 				16046ADE1DF2C76300A92E13 /* Resources */,
+				BF2B8FD0F664D15494DFA41D /* Embed Pods Frameworks */,
+				45A45EF32FCE228374807743 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -276,10 +308,10 @@
 				16046AF01DF2C76400A92E13 /* Assets.xcassets in Resources */,
 				1638E5A81DF6B29600B81A33 /* ImageCell.xib in Resources */,
 				168E99341DF56871006429D3 /* DetailCell.xib in Resources */,
+				16568C731DF810C400A5F1FC /* SummaryCell.xib in Resources */,
 				168E992F1DF56702006429D3 /* PostDetailViewController.xib in Resources */,
-				1666519E1DF5303B006454E2 /* SummaryCell.xib in Resources */,
 				16568C691DF7DDA800A5F1FC /* LoadingCell.xib in Resources */,
-				166651991DF524B3006454E2 /* HomeViewController.xib in Resources */,
+				16568C711DF810C400A5F1FC /* HomeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +324,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		45A45EF32FCE228374807743 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FunnyPicture/Pods-FunnyPicture-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A650F41F69CE7B75A4C2D7BE /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		BF2B8FD0F664D15494DFA41D /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FunnyPicture/Pods-FunnyPicture-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		16046ADC1DF2C76300A92E13 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -300,10 +380,11 @@
 				16046B0C1DF5221800A92E13 /* OCGumbo.m in Sources */,
 				16046AE81DF2C76400A92E13 /* AppDelegate.m in Sources */,
 				168E99331DF56871006429D3 /* DetailCell.m in Sources */,
+				16568C701DF810C400A5F1FC /* HomeViewController.m in Sources */,
 				168E992E1DF56702006429D3 /* PostDetailViewController.m in Sources */,
+				16568C761DF811F200A5F1FC /* Post.m in Sources */,
+				16568C721DF810C400A5F1FC /* SummaryCell.m in Sources */,
 				16046B0D1DF5221800A92E13 /* OCGumbo+Query.m in Sources */,
-				166651981DF524B3006454E2 /* HomeViewController.m in Sources */,
-				1666519D1DF5303B006454E2 /* SummaryCell.m in Sources */,
 				1638E5AB1DF6B47800B81A33 /* ImageCell.m in Sources */,
 				16046AE51DF2C76400A92E13 /* main.m in Sources */,
 			);
@@ -429,10 +510,12 @@
 		};
 		16046B031DF2C76400A92E13 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0F9B9A393790ED03DBF1C390 /* Pods-FunnyPicture.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = NBT8RMV8WY;
 				INFOPLIST_FILE = FunnyPicture/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -445,10 +528,12 @@
 		};
 		16046B041DF2C76400A92E13 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6EA594A24EFCAC6972106B8 /* Pods-FunnyPicture.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = NBT8RMV8WY;
 				INFOPLIST_FILE = FunnyPicture/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
