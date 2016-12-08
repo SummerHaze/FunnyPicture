@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DetailCell : UITableViewCell
 
+@interface DetailCell : UITableViewCell
 @property (nonatomic, weak) IBOutlet UILabel *title;
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
+
+- (void)configureForPost:(NSMutableArray *)postInfo;
 
 @end

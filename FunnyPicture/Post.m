@@ -13,6 +13,7 @@
 #import <AFNetworking/AFNetworking.h>
 
 static NSOperationQueue *queue = nil;
+static NSString * const dirNameInCaches = @"images";
 
 @interface Post()
 
@@ -28,40 +29,34 @@ static NSOperationQueue *queue = nil;
 
 // 将文字和URL从HTML中解析出来，以数组（单个元素）方式，保存在postInfo中
 - (void)fetchPostInfoWithURL:(NSString *)postUrl {
-    self.postInfo = [[NSMutableArray alloc]initWithCapacity:1];
-    
     NSURL *url = [NSURL URLWithString:postUrl];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSError *error;
+    NSString *htmlString = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:&error];
     
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
-    operation.responseSerializer = [AFJSONResponseSerializer serializer];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self parseHTML:responseObject];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"获取贴子详情失败，ErrorCode：%ld", (long)error.code);
-    }];
-
+    [self parseHTML:htmlString];
 }
 
 // 解析贴子内容
 - (void)parseHTML:(NSString *)htmlString {
+    self.postInfo = [[NSMutableArray alloc]initWithCapacity:1];
     OCGumboDocument *document = [[OCGumboDocument alloc] initWithHTMLString:htmlString];
     OCQueryObject *queryResult = document.Query(@"body").find(@".post-content").find(@"p"); // OCGumboElement数组
     for (OCGumboNode *node in queryResult) {
-        if ([node.childNodes[0] isKindOfClass:[OCGumboText class]]) {
-            // 图片配文
-            OCGumboText *text = (OCGumboText *)node.childNodes[0];
-            NSString *desc = text.data;
-            if ((desc.length > 0) && [self containNumber:desc]) {
-                [self.postInfo addObject:desc];
-            }
-        } else if ([node.childNodes[0] isKindOfClass:[OCGumboElement class]]) {
-            // 图片链接
-            OCGumboElement *element = (OCGumboElement *)node.childNodes[0];
-            NSString *url = element.attr(@"data-src");
-            if ([url length] > 0) {
-                [self.postInfo addObject:url];
+        if ([node.childNodes count] > 0) {
+            if ([node.childNodes[0] isKindOfClass:[OCGumboText class]]) {
+                // 图片配文
+                OCGumboText *text = (OCGumboText *)node.childNodes[0];
+                NSString *desc = text.data;
+                if ((desc.length > 0) && [self containNumber:desc]) {
+                    [self.postInfo addObject:desc];
+                }
+            } else if ([node.childNodes[0] isKindOfClass:[OCGumboElement class]]) {
+                // 图片链接
+                OCGumboElement *element = (OCGumboElement *)node.childNodes[0];
+                NSString *url = element.attr(@"data-src");
+                if ([url length] > 0) {
+                    [self.postInfo addObject:url];
+                }
             }
         }
     }
@@ -94,8 +89,8 @@ static NSOperationQueue *queue = nil;
 }
 
 // 将文字和单个URL匹配，组合成数组
-- (void)rearrangePostFromArray:(NSArray *)arr {
-    self.postTnfoRearranged = [[NSMutableArray alloc] initWithCapacity:1]; // 最外层数组
+- (NSMutableArray *)rearrangePostFromArray:(NSArray *)arr {
+    NSMutableArray *tmp = [[NSMutableArray alloc] initWithCapacity:1]; // 最外层数组
     NSMutableArray *tmpArr;
     for (int i = 0; i < [arr count]; i++) {
         if (![arr[i] containsString:@"http"]) { // 标题
@@ -104,41 +99,63 @@ static NSOperationQueue *queue = nil;
         } else {
             if ([tmpArr count] == 1) {
                 [tmpArr addObject:arr[i]];
-                [self.postTnfoRearranged  addObject:tmpArr];
+                [tmp addObject:tmpArr];
             } else {
-                [self.postTnfoRearranged  addObject:arr[i]];
+                [tmp addObject:@[arr[i]]];
             }
         }
     }
+    return tmp;
 }
 
 // 图片下载并保存本地
-- (void)downloadAndSaveImage:(NSString *)imageUrl completion:(PostBlock)block {
-    dispatch_group_t group = dispatch_group_create();
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+- (void)downloadImage:(NSString *)imageUrl completion:(PostBlock)block {
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
     
-    dispatch_group_async(group, queue, ^{
-        NSURL *url = [NSURL URLWithString:imageUrl];
-        NSString *imageName = [imageUrl componentsSeparatedByString:@"/"].lastObject;
-        NSLog(@">>>准备下载: %@", imageUrl);
-                               
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        UIImage *image = [UIImage imageWithData:data];
-        
-        self.savedImages = [[NSMutableArray alloc]initWithCapacity:1];
-        NSString *imagePath = [self obetainImagePathInCaches:@"images" imageName:imageName];
-        NSData *imgData = UIImagePNGRepresentation(image);
-        
-        NSError *error;
-        BOOL success = [imgData writeToFile:imagePath options:NSDataWritingAtomic error:&error];
-        if (success) {
-            block(YES);
-            [self.savedImages addObject:imageName];
-        } else {
-            block(NO);
-            NSLog(@"保存至本地失败，报错: %@", error);
-        }
-    });
+    NSURL *URL = [NSURL URLWithString:imageUrl];
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    
+    NSString *imageName = [imageUrl componentsSeparatedByString:@"/"].lastObject;
+    NSString *component = [NSString stringWithFormat:@"%@/%@", dirNameInCaches, imageName];
+    
+    [self createDirInCaches:dirNameInCaches];
+    
+    NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        NSURL *cachesDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSCachesDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+        return [cachesDirectoryURL URLByAppendingPathComponent:component];
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        block(YES);
+        NSLog(@"downloaded: %@", filePath);
+    }];
+    
+    [downloadTask resume];
+    
+
+//    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+//    dispatch_async(queue, ^{
+//        NSURL *url = [NSURL URLWithString:imageUrl];
+//        NSString *imageName = [imageUrl componentsSeparatedByString:@"/"].lastObject;
+//        NSLog(@">>>准备下载: %@", imageUrl);
+//                               
+//        NSData *data = [NSData dataWithContentsOfURL:url];
+//        UIImage *image = [UIImage imageWithData:data];
+//        
+//        self.savedImages = [[NSMutableArray alloc]initWithCapacity:1];
+//        NSString *imagePath = [self obetainImagePathInCaches:@"images" imageName:imageName];
+//        NSData *imgData = UIImagePNGRepresentation(image);
+//        
+//        NSError *error;
+//        BOOL success = [imgData writeToFile:imagePath options:NSDataWritingAtomic error:&error];
+//        if (success) {
+//            block(YES);
+//            [self.savedImages addObject:imageName];
+//        } else {
+//            block(NO);
+//            NSLog(@"保存至本地失败，报错: %@", error);
+//        }
+//    });
+    
 }
 
 // 获取image存储在Caches中的绝对路径
@@ -152,12 +169,17 @@ static NSOperationQueue *queue = nil;
 // 获取所有的图片下载url
 - (NSMutableArray *)obtainImageUrls:(NSArray *)array {
     NSMutableArray *urls = [[NSMutableArray alloc] init];
-    for (int i = 0; i < [array count]; i++) {
-        NSArray *arr = [array[i] objectForKey:@"imageUrls"];
-        for (NSString *str in arr) {
+    for (NSString *str in array) {
+        if ([str containsString:@"http"]) {
             [urls addObject:str];
         }
     }
+//    for (int i = 0; i < [array count]; i++) {
+//        NSArray *arr = [array[i] objectForKey:@"imageUrls"];
+//        for (NSString *str in arr) {
+//            [urls addObject:str];
+//        }
+//    }
     return urls;
 }
 

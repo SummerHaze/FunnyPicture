@@ -67,41 +67,39 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
 
 - (void)performDownload {
     post = [[Post alloc]init];
-    [post fetchPostInfoWithURL:self.postUrl]; // 解析帖子内容
-    imageUrls = [post obtainImageUrls:post.postInfo]; // 解析出当篇帖子中所有图片下载Url
-    downloadedImages = [self getAllImagesInPath:[self getImageDir]]; // 已下载图片
+    [post fetchPostInfoWithURL:self.postUrl]; // 解析帖子图文内容
+    imageUrls = [post obtainImageUrls:post.postInfo]; // 解析出当篇帖子中所有图片下载Url，用于进详情页下载
+    rearrangedPost = [post rearrangePostFromArray:post.postInfo]; // 将图文内容，按照要展示的Cell数据源格式重新组织成对应数组
+    downloadedImages = [self getAllImagesInPath:[self getImageDir]]; // 已下载保存到的图片
+    
     for (int i = 0; i < [imageUrls count]; i++) {
-        if (![downloadedImages containsObject:imageUrls[i]]) {  // 未下载
-            [post downloadAndSaveImage:imageUrls[i]
-                            completion:^(BOOL success){
-                                if (success) {
-                                    [self.tableView reloadData];
-//                                    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-//                                        isDownloaded = YES;
-//                                        dispatch_async(dispatch_get_main_queue(), ^{
-//                                            
-//                                        });
-//                                    });
-                                }
-                            }];
+        NSString *imageName = [imageUrls[i] componentsSeparatedByString:@"/"].lastObject;
+        if (![downloadedImages containsObject:imageName]) {  // 未下载
+            [post downloadImage:imageUrls[i]
+                     completion:^(BOOL success) {
+                         if (success) {
+                             [downloadedImages addObject:imageName];
+                             [self.tableView reloadData];
+                         }
+                     }];
         } else {
-            NSLog(@"图片已下载：%@", imageUrls[i]);
+            NSLog(@"图片已下载,不重复下载：%@", imageUrls[i]);
         }
     }
 }
 
 #pragma mark - Table view datasource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (isDownloaded) {
+//    if (isDownloaded) {
         return [rearrangedPost count];
-    } else {
-        return 1;
-    }
+//    } else {
+//        return 1;
+//    }
     
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (isDownloaded) {
+//    if (isDownloaded) {
         NSString *path;
         CGSize size;
         
@@ -132,55 +130,34 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
                 return cellHeight;
             }
         }
-    } else {
-        return 80;
-    }
+//    } else {
+//        return 80;
+//    }
 
 }
 
 #pragma mark - Table view delegate
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (isDownloaded) {
-        NSArray *elements;
-        NSUInteger count;
-        NSString *singleUrl;
-        
-        if ([rearrangedPost[indexPath.row] isKindOfClass:[NSArray class]]) {
-            elements = rearrangedPost[indexPath.row];
-            count = [elements count];
-        } else {
-            singleUrl = rearrangedPost[indexPath.row];
-            count = 1;
-        }
-        
+//    if (isDownloaded) {
+        NSUInteger count = [rearrangedPost[indexPath.row] count];
         if (count == 2) {
-            // 一条图文底下只有一张图片,用一个DetailCell即可
+            // 一条文字下面只有一张图片,用一个DetailCell即可
             DetailCell *cell = (DetailCell *)[tableView dequeueReusableCellWithIdentifier:DetailCellIdentifier];
-            cell.title.text = elements[0];
-            
-            NSString *name = [elements[1] componentsSeparatedByString:@"/"].lastObject;
-            UIImage *image = [self getImageByName:name];
-            
-            [cell.imageView setImage:image];
-            
+            [cell configureForPost:rearrangedPost[indexPath.row]];
             return cell;
         } else {
+            // 一条文字下有多张图片，从第二张开始使用ImageCell
             ImageCell *cell = (ImageCell *)[tableView dequeueReusableCellWithIdentifier:ImageCellIdentifier];
-            
-            NSString *name = [singleUrl componentsSeparatedByString:@"/"].lastObject;
-            UIImage *image = [self getImageByName:name];
-            
-            [cell.imageView setImage:image];
-            
+            [cell configureForImage:rearrangedPost[indexPath.row][0]];
             return cell;
         }
-    } else {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:LoadingCellIdentifier forIndexPath:indexPath];
-        UIActivityIndicatorView *spinner = (UIActivityIndicatorView *)[cell viewWithTag:100];
-        [spinner startAnimating];
-        
-        return cell;
-    }
+//    } else { // 转菊花
+//        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:LoadingCellIdentifier forIndexPath:indexPath];
+//        UIActivityIndicatorView *spinner = (UIActivityIndicatorView *)[cell viewWithTag:100];
+//        [spinner startAnimating];
+//        
+//        return cell;
+//    }
 
 }
 
@@ -193,10 +170,6 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
     return array;
 }
 
-- (NSString *)getImageDir {
-    return [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:[NSString stringWithFormat:@"/images/"]];
-}
-
 - (UIImage *)getImageByName:(NSString *)name {
     NSString *path = [NSString stringWithFormat:@"%@%@", [self getImageDir], name];
     NSData *data = [NSData dataWithContentsOfFile:path];
@@ -206,6 +179,10 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
     } else {
         return nil;
     }
+}
+
+- (NSString *)getImageDir {
+    return [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:[NSString stringWithFormat:@"/images/"]];
 }
 
 - (UIImage *)scaleImage:(UIImage *)img toScale:(CGFloat)scale {

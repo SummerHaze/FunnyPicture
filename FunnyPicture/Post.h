@@ -11,14 +11,14 @@
 @interface Post : NSObject
 
 @property (nonatomic, strong) NSMutableArray *postInfo;
-@property (nonatomic, strong) NSMutableArray *postTnfoRearranged;
+@property (nonatomic, strong) NSMutableArray *postInfoRearranged;
 @property (nonatomic, strong) NSMutableArray *savedImages;
 
 typedef void (^PostBlock)(BOOL success);
 
 - (void)fetchPostInfoWithURL:(NSString *)postUrl;
-- (void)rearrangePostFromArray:(NSArray *)arr;
+- (NSMutableArray *)rearrangePostFromArray:(NSArray *)arr;
 - (NSMutableArray *)obtainImageUrls:(NSArray *)array;
-- (void)downloadAndSaveImage:(NSString *)imageUrl completion:(PostBlock)block;
+- (void)downloadImage:(NSString *)imageUrl completion:(PostBlock)block;
 
 @end
