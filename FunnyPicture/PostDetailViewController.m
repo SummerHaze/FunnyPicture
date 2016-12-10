@@ -57,12 +57,12 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
     
     cellNib = [UINib nibWithNibName:LoadingCellIdentifier bundle:nil];
     [self.tableView registerNib:cellNib forCellReuseIdentifier:LoadingCellIdentifier];
-    
-    [self performDownload];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self addObserver:self forKeyPath:@"counts" options:NSKeyValueObservingOptionNew context:nil];
+    [self performDownload];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
@@ -90,7 +90,7 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
     [post fetchPostInfoWithURL:self.postUrl]; // 解析帖子图文内容
     imageUrls = [post obtainImageUrls:post.postInfo]; // 解析出当篇帖子中所有图片下载Url，用于进详情页下载
     rearrangedPost = [post rearrangePostFromArray:post.postInfo]; // 将图文内容，按照要展示的Cell数据源格式重新组织成对应数组
-    downloadedImages = [self getAllImagesInPath:[self getImageDir]]; // 已下载保存到的图片
+    downloadedImages = [self getAllImagesInPath:[self getImageDir]]; // 已下载保存的图片
     self.counts = [imageUrls count];
     
     for (int i = 0; i < [imageUrls count]; i++) {
@@ -108,6 +108,7 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
             NSLog(@"图片已下载,不重复下载：%@", imageUrls[i]);
             self.counts--;
         }
+        NSLog(@"current counts: %ld", (long)self.counts);
     }
 
 
