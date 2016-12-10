@@ -21,4 +21,6 @@ typedef void (^PostBlock)(BOOL success);
 - (NSMutableArray *)obtainImageUrls:(NSArray *)array;
 - (void)downloadImage:(NSString *)imageUrl completion:(PostBlock)block;
 
+- (void)cancelDownload;
+
 @end

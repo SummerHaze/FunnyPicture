@@ -15,6 +15,8 @@
 static NSOperationQueue *queue = nil;
 static NSString * const dirNameInCaches = @"images";
 
+static AFURLSessionManager *manager;
+
 @interface Post()
 
 @end
@@ -110,8 +112,11 @@ static NSString * const dirNameInCaches = @"images";
 
 // 图片下载并保存本地
 - (void)downloadImage:(NSString *)imageUrl completion:(PostBlock)block {
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+    });
     
     NSURL *URL = [NSURL URLWithString:imageUrl];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
@@ -125,12 +130,22 @@ static NSString * const dirNameInCaches = @"images";
         NSURL *cachesDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSCachesDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
         return [cachesDirectoryURL URLByAppendingPathComponent:component];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-        block(YES);
-        NSLog(@"downloaded: %@", filePath);
+        if (error) {
+            block(NO);
+        } else {
+            block(YES);
+            NSLog(@"downloaded: %@", filePath);
+        }
     }];
     
     [downloadTask resume];
     
+}
+
+- (void)cancelDownload {
+    NSLog(@"download canceled");
+    [manager.tasks makeObjectsPerformSelector:@selector(cancel)];
+}
 
 //    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 //    dispatch_async(queue, ^{
@@ -156,7 +171,7 @@ static NSString * const dirNameInCaches = @"images";
 //        }
 //    });
     
-}
+
 
 // 获取image存储在Caches中的绝对路径
 - (NSString *)obetainImagePathInCaches:(NSString *)dir imageName:(NSString *)image {

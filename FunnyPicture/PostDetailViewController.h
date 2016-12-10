@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PostDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface PostDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) NSString *postUrl;
 

@@ -10,6 +10,7 @@
 #import "DetailCell.h"
 #import "ImageCell.h"
 #import "Post.h"
+#import "HomeViewController.h"
 
 #define DETAIL_MARGIN 48
 #define IMAGE_MARGIN 16
@@ -21,6 +22,8 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
 @interface PostDetailViewController ()
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, assign) NSInteger counts;
+
 @end
 
 @implementation PostDetailViewController
@@ -32,6 +35,7 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
     CGFloat width;
     BOOL isDownloaded;
     Post *post;
+
 }
 
 #pragma mark - Life cycle
@@ -42,6 +46,8 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
 //    width = self.tableView.bounds.size.width; // 该宽度受xib文件中的机型屏幕影响
     width = [UIApplication sharedApplication].statusBarFrame.size.width;
     isDownloaded = NO;
+    self.navigationController.delegate = self;
+    [self.navigationItem setTitle:@"详情"];
     
     UINib *cellNib = [UINib nibWithNibName:DetailCellIdentifier bundle:nil];
     [self.tableView registerNib:cellNib forCellReuseIdentifier:DetailCellIdentifier];
@@ -55,9 +61,23 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
     [self performDownload];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self addObserver:self forKeyPath:@"counts" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"counts"]) {
+        NSNumber *number = [change objectForKey:@"new"];
+        if (number.intValue == 0) {
+            isDownloaded = YES;
+            [self.tableView reloadData];
+        }
+    }
+}
+
 - (void)dealloc {
+    [self removeObserver:self forKeyPath:@"counts"];
     NSLog(@"dealloc: %@",self);
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -71,6 +91,7 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
     imageUrls = [post obtainImageUrls:post.postInfo]; // 解析出当篇帖子中所有图片下载Url，用于进详情页下载
     rearrangedPost = [post rearrangePostFromArray:post.postInfo]; // 将图文内容，按照要展示的Cell数据源格式重新组织成对应数组
     downloadedImages = [self getAllImagesInPath:[self getImageDir]]; // 已下载保存到的图片
+    self.counts = [imageUrls count];
     
     for (int i = 0; i < [imageUrls count]; i++) {
         NSString *imageName = [imageUrls[i] componentsSeparatedByString:@"/"].lastObject;
@@ -79,27 +100,30 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
                      completion:^(BOOL success) {
                          if (success) {
                              [downloadedImages addObject:imageName];
-                             [self.tableView reloadData];
+                             self.counts--;
+//                             [self.tableView reloadData];
                          }
                      }];
         } else {
             NSLog(@"图片已下载,不重复下载：%@", imageUrls[i]);
+            self.counts--;
         }
     }
+
+
 }
 
 #pragma mark - Table view datasource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    if (isDownloaded) {
+    if (isDownloaded) {
         return [rearrangedPost count];
-//    } else {
-//        return 1;
-//    }
-    
+    } else {
+        return 1;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    if (isDownloaded) {
+    if (isDownloaded) {
         NSString *path;
         CGSize size;
         
@@ -130,15 +154,15 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
                 return cellHeight;
             }
         }
-//    } else {
-//        return 80;
-//    }
+    } else {
+        return 80;
+    }
 
 }
 
 #pragma mark - Table view delegate
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    if (isDownloaded) {
+    if (isDownloaded) {
         NSUInteger count = [rearrangedPost[indexPath.row] count];
         if (count == 2) {
             // 一条文字下面只有一张图片,用一个DetailCell即可
@@ -151,14 +175,21 @@ static NSString * const LoadingCellIdentifier = @"LoadingCell";
             [cell configureForImage:rearrangedPost[indexPath.row][0]];
             return cell;
         }
-//    } else { // 转菊花
-//        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:LoadingCellIdentifier forIndexPath:indexPath];
-//        UIActivityIndicatorView *spinner = (UIActivityIndicatorView *)[cell viewWithTag:100];
-//        [spinner startAnimating];
-//        
-//        return cell;
-//    }
+    } else { // 转菊花
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:LoadingCellIdentifier forIndexPath:indexPath];
+        UIActivityIndicatorView *spinner = (UIActivityIndicatorView *)[cell viewWithTag:100];
+        [spinner startAnimating];
+        
+        return cell;
+    }
 
+}
+
+#pragma mark - UINavigation controller delelgate
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    if ([viewController isKindOfClass:[HomeViewController class]]) {
+        [post cancelDownload];
+    }
 }
 
 #pragma mark - Handle image
